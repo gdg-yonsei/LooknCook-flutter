@@ -30,6 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_native_splash:
+  get:
+  http: 
+  camera:
+  speech_to_text: 
+  flutter_tts:
+  permission_handler:
+
 
 
   # The following adds the Cupertino Icons font to your application.

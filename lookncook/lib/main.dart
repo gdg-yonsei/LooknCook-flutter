@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:get/route_manager.dart';
 import 'dart:async';
 
 import 'package:lookncook/screens/home_screen.dart';
@@ -19,11 +20,12 @@ class MyApp extends StatelessWidget {
     Timer(const Duration(seconds: 2), () {
       FlutterNativeSplash.remove();
     });
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
+            .copyWith(background: Colors.red),
       ),
       home: const HomeScreen(),
     );

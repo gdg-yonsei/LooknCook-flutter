@@ -12,7 +12,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Timer(const Duration(seconds: 2), () async {
     await dotenv.load(fileName: ".env");
-    await API.instance.init();
+    await API().init();
     await LCApis().ping();
     FlutterNativeSplash.remove();
   });

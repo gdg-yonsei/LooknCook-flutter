@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lookncook/apis/API.dart';
+import 'package:lookncook/apis/apis.dart';
 import 'package:lookncook/screens/home_screen.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
   Timer(const Duration(seconds: 2), () async {
     await dotenv.load(fileName: ".env");
     await API.instance.init();
+    await LCApis().ping();
     FlutterNativeSplash.remove();
   });
   runApp(const MyApp());

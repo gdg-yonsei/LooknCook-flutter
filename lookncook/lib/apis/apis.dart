@@ -10,7 +10,9 @@ class LCApis {
 
   Future<void> ping() async {
     var res = await _api.get("/ping");
-    Logger().logSuccess(res["message"]);
+    if (res["message"] == "pong") {
+      Logger().logSuccess("API test succeeded");
+    }
   }
 
   Future<dynamic> uploadFridge(File image) async {

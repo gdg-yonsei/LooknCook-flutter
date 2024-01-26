@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           SizedBox(
             width: 300,
-            child: Image.asset('assets/image/GDSC_Logo.png'),
+            child: Image.asset('assets/image/LC_Logo.png'),
           ),
           FutureBuilder(
               future: cameras,

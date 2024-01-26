@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,14 +11,6 @@ Future<http.Response> fetchAlbum() async {
   await dotenv.load(fileName: ".env");
   return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
 }
-
-// export interface APIInstance {
-//   get<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
-//   delete<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
-//   post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
-//   put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
-//   patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
-// }
 
 class API {
   static final API instance = API._internal();
@@ -37,9 +30,9 @@ class API {
     }
   }
 
-  void setHeaderToken(String token) {
-    _headers["AUTH-TOKEN"] = token;
-  }
+  // void setHeaderToken(String token) {
+  //   _headers["DEVICE-ID"] = token;
+  // }
 
   Future<Map<String, dynamic>> get(String url,
       {Map<String, String>? headers}) async {
@@ -54,6 +47,54 @@ class API {
       var body = jsonDecode(res.body);
 
       return body;
+    } else {
+      throw Exception('[API] failed to get data');
+    }
+  }
+
+  Future<Map<String, dynamic>> post(String url,
+      {Map<String, String>? headers, dynamic data}) async {
+    String url_ = '$_baseUrl$url';
+    Logger().logInfo(url_);
+
+    var res = await http.post(Uri.parse(url_),
+        headers: headers == null ? _headers : {..._headers, ...headers},
+        body: data);
+
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+
+      return body;
+    } else {
+      throw Exception('[API] failed to get data');
+    }
+  }
+
+  Future<void> postMultipart(
+    String url,
+    Map<String, dynamic> data, {
+    Map<String, String>? headers,
+  }) async {
+    String url_ = '$_baseUrl$url';
+    Logger().logInfo(url_);
+
+    var request = http.MultipartRequest("POST", Uri.parse(url_));
+
+    for (String key in data.keys) {
+      var value = data[key];
+      if (value is File) {
+        var bytes = value.readAsBytesSync();
+        request.files.add(http.MultipartFile.fromBytes(key, bytes,
+            contentType: MediaType('image', 'jpeg')));
+      } else {
+        request.fields[key] = value;
+      }
+    }
+
+    var res = await request.send();
+    if (res.statusCode == 200) {
+      // TODO: http response to data;
+      print(res);
     } else {
       throw Exception('[API] failed to get data');
     }

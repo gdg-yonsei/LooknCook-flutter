@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lookncook/apis/API.dart';
 import 'package:lookncook/apis/apis.dart';
 import 'package:lookncook/screens/home_screen.dart';
+import 'package:lookncook/theme/theme.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +28,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: const MaterialTheme(
+        TextTheme(),
+      ).light(),
       home: HomeScreen(),
     );
   }

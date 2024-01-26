@@ -11,13 +11,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blueGrey,
+      color: Theme.of(context).primaryColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             width: 300,
-            child: Image.asset('assets/image/GDSC_Logo.png'),
+            child: Image.asset('assets/image/LC_Logo.png'),
           ),
           FutureBuilder(
               future: cameras,

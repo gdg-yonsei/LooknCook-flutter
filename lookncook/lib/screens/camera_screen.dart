@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:get/get.dart';
 import 'package:lookncook/apis/apis.dart';
+import 'package:lookncook/screens/fridge_result_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -65,7 +67,6 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   void _startListening() async {
-    print("여기 맞지?..");
     await _speechToText.listen(
       onResult: _onSpeechResult,
       listenFor: const Duration(seconds: 10),
@@ -74,16 +75,13 @@ class _CameraScreenState extends State<CameraScreen> {
       partialResults: false,
       listenMode: ListenMode.confirmation,
     );
-    print("뭔데...");
     setState(() {});
   }
 
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
     if (result.recognizedWords == "shooting") {
-      debugPrint("오키 좋았어!?..");
       var xFile = await _controller.takePicture();
       capturedImages.add(File(xFile.path));
-      debugPrint("개꿀!?..");
     }
     setState(() {});
   }
@@ -143,9 +141,7 @@ class _CameraScreenState extends State<CameraScreen> {
             onTap: () async {
               await _initializeControllerFuture;
               var xFile = await _controller.takePicture();
-              setState(() {
-                capturedImages.add(File(xFile.path));
-              });
+              Get.to(() => FridgeResultScreen(imageFile: File(xFile.path)));
             },
             child: Container(
               height: 60,

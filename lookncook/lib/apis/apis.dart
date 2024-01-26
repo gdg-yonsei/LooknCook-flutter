@@ -15,15 +15,16 @@ class LCApis {
     }
   }
 
-  Future<dynamic> uploadFridge(File image) async {
+  Future<String> uploadFridge(File image) async {
     var res = await _api.postMultipart(
-      "/gemini-image",
+      "/fridge",
       {"image": image},
       headers: {
         "Content-Type": "multipart/form-data",
       },
     );
-    // String fridge = res["fridge"];
-    // List<dynamic> recipe = res["recipe"];
+
+    String fridge = res["Parts"][0];
+    return fridge;
   }
 }

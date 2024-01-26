@@ -70,7 +70,7 @@ class API {
     }
   }
 
-  Future<void> postMultipart(
+  Future<Map<String, dynamic>> postMultipart(
     String url,
     Map<String, dynamic> data, {
     Map<String, String>? headers,
@@ -94,7 +94,8 @@ class API {
     var res = await request.send();
     if (res.statusCode == 200) {
       // TODO: http response to data;
-      print(res);
+      final response = await http.Response.fromStream(res);
+      return jsonDecode(response.body);
     } else {
       throw Exception('[API] failed to get data');
     }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:lookncook/apis/apis.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -42,9 +43,11 @@ class _CameraScreenState extends State<CameraScreen> {
       _initializeControllerFuture; //Future to wait until camera initializes
   int selectedCamera = 0;
   List<File> capturedImages = [];
+
   final String _lastWords = "";
 
   initializeCamera(int cameraIndex) async {
+    //  LCApis().uploadFridge(capturedImages[0]);
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
       widget.cameras[cameraIndex],

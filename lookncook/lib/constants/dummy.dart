@@ -59,7 +59,7 @@ final List<Ingredient> dummyIngredients = [
           "On the bottom shelf, the fourth container on the right has salad mix in it."),
 ];
 
-final List<Recipe> recipeList = [
+final List<Recipe> dummyRecipeList = [
   Recipe(
       name: "Cheesy White Bean Rice Bowl",
       steps: [

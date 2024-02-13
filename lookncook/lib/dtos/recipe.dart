@@ -1,5 +1,5 @@
-import 'package:lookncook/dtos/Ingredient.dart';
 import 'package:lookncook/dtos/enums.dart';
+import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe_step.dart';
 
 class Recipe {

@@ -1,62 +1,88 @@
-import 'package:lookncook/dtos/Ingredient.dart';
-import 'package:lookncook/dtos/Recipe.dart';
+import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/dtos/cook_env_state.dart';
 import 'package:lookncook/dtos/enums.dart';
+import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe_step.dart';
 
 final List<Ingredient> dummyIngredients = [
   Ingredient(
       name: "White Beans",
       locationDescription:
-          "On the top shelf, the first container on the left has white beans in it"),
+          "On the top shelf, the first container on the left has white beans in it",
+      thumbnailImage:
+          "https://www.knowyourproduce.com/wp-content/uploads/2021/11/instant-pot-white-beans.jpg"),
   Ingredient(
       name: "Rice",
       locationDescription:
-          "On the top shelf, the second container has rice in it."),
+          "On the top shelf, the second container has rice in it.",
+      thumbnailImage:
+          'https://www.world-grain.com/ext/resources/2022/10/25/Rice_AdobeStock_64819529_E.jpg?height=667&t=1666706505&width=1080'),
   Ingredient(
       name: "Green Beans",
       locationDescription:
-          "On the top shelf, the third container on the right has green beans in it"),
+          "On the top shelf, the third container on the right has green beans in it",
+      thumbnailImage:
+          "https://www.beyondthechickencoop.com/wp-content/uploads/2022/12/Blanched-Green-Beans-3.jpg"),
   Ingredient(
       name: "Cheese",
       locationDescription:
-          "On the middle shelf, the first container on the left has yellow cheese in it"),
+          "On the middle shelf, the first container on the left has yellow cheese in it",
+      thumbnailImage:
+          "https://ca-times.brightspotcdn.com/dims4/default/54847e8/2147483647/strip/true/crop/2048x1280+0+43/resize/1200x750!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fb2%2Fa5%2Fd673ffac73e3ff63f2f3c095fde9%2Fhomemade-american-cheese-recipes-db"),
   Ingredient(
       name: "Brown Rice",
       locationDescription:
-          "On the middle shelf, the second container has brown rice in it."),
+          "On the middle shelf, the second container has brown rice in it.",
+      thumbnailImage:
+          "https://dainty.ca/wp-content/uploads/2021/07/brown-rice-recipe-1.jpg"),
   Ingredient(
       name: "Pasta",
       locationDescription:
-          "On the middle shelf, The third container has pasta in it."),
+          "On the middle shelf, The third container has pasta in it.",
+      thumbnailImage:
+          "https://www.biggerbolderbaking.com/wp-content/uploads/2023/09/Penne-Pasta-Thumbnail-scaled.jpg"),
   Ingredient(
       name: "Eggs",
       locationDescription:
-          "On the middle shelf, the fourth container has eggs in it."),
+          "On the middle shelf, the fourth container has eggs in it.",
+      thumbnailImage:
+          "https://cdn.britannica.com/94/151894-050-F72A5317/Brown-eggs.jpg"),
   Ingredient(
       name: "Cherry Tomatoes",
       locationDescription:
-          "On the middle shelf, the fifth container has cherry tomatoes in it."),
+          "On the middle shelf, the fifth container has cherry tomatoes in it.",
+      thumbnailImage:
+          "https://www.wholesomeyum.com/wp-content/uploads/2021/07/wholesomeyum-Carbs-In-Cherry-Tomatoes-Are-Cherry-Tomatoes-Keto-6.jpg"),
   Ingredient(
       name: "Cucumbers",
       locationDescription:
-          "On the middle shelf, the sixth container on the right has cucumbers in it."),
+          "On the middle shelf, the sixth container on the right has cucumbers in it.",
+      thumbnailImage:
+          "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2022/07/15/0/FNK_Cucumber-Shot-H3_s4x3.jpg.rend.hgtvcom.1280.1280.suffix/1657897212314.jpeg"),
   Ingredient(
       name: "Broccoli",
       locationDescription:
-          "On the bottom shelf, the first container on the left has broccoli in it. "),
+          "On the bottom shelf, the first container on the left has broccoli in it. ",
+      thumbnailImage:
+          "https://images.immediate.co.uk/production/volatile/sites/30/2022/07/Broccoli-78ec54e.jpg?quality=90&resize=556,505"),
   Ingredient(
       name: "Red Peppers",
       locationDescription:
-          "On the bottom shelf, the second container has red peppers in it."),
+          "On the bottom shelf, the second container has red peppers in it.",
+      thumbnailImage:
+          "https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Red-peppers-afa27f8.jpg?resize=768,574"),
   Ingredient(
       name: "Ham Hock",
       locationDescription:
-          "On the bottom shelf, the third container has a ham hock in it."),
+          "On the bottom shelf, the third container has a ham hock in it.",
+      thumbnailImage:
+          "https://carnbrooke.com/wp-content/uploads/2021/10/Ham-Hock.jpg"),
   Ingredient(
       name: "Salad Mix",
       locationDescription:
-          "On the bottom shelf, the fourth container on the right has salad mix in it."),
+          "On the bottom shelf, the fourth container on the right has salad mix in it.",
+      thumbnailImage:
+          "https://www.homemadeinterest.com/wp-content/uploads/2023/03/Mixed-Green-Salad_2.jpg"),
 ];
 
 final List<Recipe> dummyRecipeList = [
@@ -173,7 +199,7 @@ final List<Recipe> dummyRecipeList = [
   Recipe(
       name: "Brown Rice and Veggie Stir-Fry",
       steps: [],
-      level: RecipeLevel.normal,
+      level: RecipeLevel.medium,
       likeCount: 24,
       ingredients: dummyIngredients
           .where(
@@ -208,7 +234,7 @@ final List<Recipe> dummyRecipeList = [
   Recipe(
       name: "Broccoli and Cheese Stuffed Baked Potatoes",
       steps: [],
-      level: RecipeLevel.normal,
+      level: RecipeLevel.medium,
       likeCount: 45,
       ingredients: dummyIngredients
           .where(
@@ -220,7 +246,7 @@ final List<Recipe> dummyRecipeList = [
   Recipe(
       name: "Ham Hock and White Bean Soup",
       steps: [],
-      level: RecipeLevel.normal,
+      level: RecipeLevel.medium,
       likeCount: 12,
       ingredients: dummyIngredients
           .where(

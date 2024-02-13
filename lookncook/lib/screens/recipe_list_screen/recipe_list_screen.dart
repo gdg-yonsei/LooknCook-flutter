@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:lookncook/components/ingredient_item.dart';
-import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/recipe_list_screen/components/recipe_item.dart';
@@ -46,7 +45,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
             ),
             Expanded(
                 child: ListView(
-              children: dummyIngredients
+              children: widget.ingredients
                   .expand((ingredient) => <Widget>[
                         IngredientItem(ingredient: ingredient),
                         const Divider(
@@ -66,7 +65,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
-                children: dummyRecipeList
+                children: widget.recipeList
                     .map((recipe) => RecipeItem(recipe: recipe))
                     .toList(),
               ),

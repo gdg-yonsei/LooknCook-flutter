@@ -45,7 +45,8 @@ class _CookingScreenState extends State<CookingScreen> {
       });
     }
 
-    tts.speak(step.body);
+    await tts.speak(step.body);
+    // TODO(용재): 항상 Next 라고 말하는거 기다리다가 잡히면 goNextStep 호출
   }
 
   @override
@@ -55,8 +56,6 @@ class _CookingScreenState extends State<CookingScreen> {
 
     readStep();
   }
-
-  // TODO(용재): 항상 Next 라고 말하는거 기다리다가 잡히면 goNextStep 호출
 
   void goNextStep() {
     if (stepIdx == widget.recipe.steps.length - 1) {

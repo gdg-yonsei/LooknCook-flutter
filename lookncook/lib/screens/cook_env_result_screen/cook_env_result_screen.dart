@@ -17,13 +17,25 @@ class CookEnvResultScreen extends StatefulWidget {
 
 class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
   final FlutterTts tts = FlutterTts();
+  void speakWithTts() async {
+    tts.setLanguage('en');
+    tts.setSpeechRate(0.5);
+    await tts.speak(
+      widget.cookEnvStateList.map((i) => i.content).join("....."),
+    );
+
+    // TODO(용재): 요리하기 화면으로 넘어가기
+    // Get.to(() => CookEnvResultScreen(
+    //       cookEnvStateList: dummyCookEnvState,
+    //       imageUrl:
+    //           'https://www.world-grain.com/ext/resources/2022/10/25/Rice_AdobeStock_64819529_E.jpg?height=667&t=1666706505&width=1080',
+    //     ));
+  }
 
   @override
   void initState() {
     super.initState();
-    tts.setLanguage('en');
-    tts.setSpeechRate(0.5);
-    tts.speak(widget.cookEnvStateList.map((i) => i.content).join("....."));
+    speakWithTts();
   }
 
   @override

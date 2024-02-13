@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:get/get.dart';
 import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/ingredient_preparation_screen/components/ingredient_prep_item.dart';
@@ -69,6 +70,13 @@ class _IngredientPreparationScreenState
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+              child: Text(
+                  "${idx + 1}/${widget.recipe.ingredients.length} Complete",
+                  style: context.textTheme.titleMedium
+                      ?.apply(color: Theme.of(context).colorScheme.secondary)),
+            ),
             IngredientPrepItem(
                 ingredient: ingredient,
                 onPress: goNext,

@@ -1,8 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 
-class EmergencySituationScreen extends StatelessWidget {
+class EmergencySituationScreen extends StatefulWidget {
   const EmergencySituationScreen({super.key});
+
+  @override
+  State<EmergencySituationScreen> createState() =>
+      _EmergencySituationScreenState();
+}
+
+class _EmergencySituationScreenState extends State<EmergencySituationScreen> {
+  final FlutterTts tts = FlutterTts();
+  void speakWithTts() async {
+    tts.setLanguage('en');
+    tts.setSpeechRate(0.5);
+    await tts.speak(
+      "Emergency situation detected! Please explain the emergency situation. A emergency notification will be sent to the registered guardian’s number.",
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    speakWithTts();
+  }
 
   @override
   Widget build(BuildContext context) {

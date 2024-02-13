@@ -27,7 +27,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
     tts.speak(
-        "With the ingredients in your refrigerator, you can make dishes such as ${widget.ingredients.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more!" : "!"} Please select or say the name of the recipe, and I’ll assist you further.");
+        "With the ingredients in your refrigerator, you can make dishes such as ${widget.recipeList.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more!" : "!"} Please select or say the name of the recipe, and I’ll assist you further.");
   }
 
   @override

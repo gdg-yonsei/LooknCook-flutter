@@ -52,8 +52,8 @@ class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             FittedBox(
-              child: Image.network(widget.imageUrl),
               fit: BoxFit.fill,
+              child: Image.network(widget.imageUrl),
             ),
             Expanded(
                 child: ListView(

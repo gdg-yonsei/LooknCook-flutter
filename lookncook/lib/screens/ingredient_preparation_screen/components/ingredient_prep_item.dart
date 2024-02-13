@@ -16,43 +16,47 @@ class IngredientPrepItem extends Card {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: Image.network(ingredient.thumbnailImage).image,
-                  fit: BoxFit.cover,
-                )),
-                child: Column(
-                  children: [
-                    Text(
-                      ingredient.name,
-                      style: context.textTheme.titleLarge?.apply(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeightDelta: 5,
-                          fontSizeDelta: 5),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      ingredient.locationDescription,
-                      style: context.textTheme.titleLarge?.apply(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeightDelta: 1),
-                    ),
-                  ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: Image.network(ingredient.thumbnailImage)
+                                .image)),
+                    height: 250),
+                const SizedBox(
+                  height: 12,
                 ),
-              ),
+                Text(
+                  ingredient.name,
+                  style: context.theme.textTheme.titleLarge?.apply(
+                      color: Theme.of(context).primaryColor,
+                      fontWeightDelta: 2,
+                      fontSizeDelta: 5),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  ingredient.locationDescription,
+                  style: context.theme.textTheme.titleMedium
+                      ?.apply(fontSizeDelta: 3),
+                ),
+              ],
             ),
-            ElevatedButton(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: ElevatedButton(
               onPressed: () {
                 onPress();
               },
@@ -66,9 +70,9 @@ class IngredientPrepItem extends Card {
                   textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,8 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/screens/camera_screen.dart';
+import 'package:lookncook/screens/cook_env_result_screen/cook_env_result_screen.dart';
+import 'package:lookncook/screens/fridge_result_screen.dart';
+import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -16,33 +21,44 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 300,
+            width: 320,
             child: Image.asset('assets/image/LC_Logo.png'),
+          ),
+          SizedBox(
+            height: 20,
           ),
           FutureBuilder(
               future: cameras,
               builder: (context, snapShot) {
                 if (snapShot.hasData) {
                   return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(350, 300),
-                    ),
                     onPressed: () {
                       Get.to(() => CameraScreen(
                             cameras: snapShot.data!,
                           ));
                     },
-                    child: const Center(
+                    child: const Padding(
+                      padding: EdgeInsets.all(20),
                       child: Text(
-                        "냉장고 사진 찍고 \n시작하기",
-                        style: TextStyle(fontSize: 40),
+                        "Begin",
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 }
                 return const Center(child: CircularProgressIndicator());
-              })
+              }),
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Text(
+              "Take a picture of your refrigerator and begin!",
+              style: context.textTheme.displaySmall
+                  ?.apply(color: Colors.white, fontWeightDelta: 2),
+              textAlign: TextAlign.center,
+            ),
+          )
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +8,10 @@ import 'package:get/route_manager.dart';
 import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/screens/camera_screen.dart';
 import 'package:lookncook/screens/cook_env_result_screen/cook_env_result_screen.dart';
+import 'package:lookncook/screens/cooking_screen/cooking_screen.dart';
+import 'package:lookncook/screens/emergency_situation_screen.dart';
 import 'package:lookncook/screens/fridge_result_screen.dart';
+import 'package:lookncook/screens/ingredient_preparation_screen/ingredient_preparation_screen.dart';
 import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,10 +37,13 @@ class HomeScreen extends StatelessWidget {
               builder: (context, snapShot) {
                 if (snapShot.hasData) {
                   return ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => CameraScreen(
-                            cameras: snapShot.data!,
-                          ));
+                    onPressed: () async {
+                      Timer(const Duration(seconds: 3), () {
+                        Get.to(() => IngredientPreparationScreen(
+                              recipe: dummyRecipeList[2],
+                              // cameras: snapShot.data!,
+                            ));
+                      });
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(20),
@@ -54,8 +62,9 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(25.0),
             child: Text(
               "Take a picture of your refrigerator and begin!",
-              style: context.textTheme.displaySmall
-                  ?.apply(color: Colors.white, fontWeightDelta: 2),
+              style: context.textTheme.displaySmall?.apply(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeightDelta: 2),
               textAlign: TextAlign.center,
             ),
           )

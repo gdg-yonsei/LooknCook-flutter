@@ -5,27 +5,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:lookncook/apis/apis.dart';
+import 'package:lookncook/constants/dummy.dart';
+import 'package:lookncook/dtos/recipe.dart';
+import 'package:lookncook/screens/cook_env_result_screen/cook_env_result_screen.dart';
 import 'package:lookncook/screens/fridge_result_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
-class CameraScreen extends StatefulWidget {
-  final List<CameraDescription> cameras;
-  const CameraScreen({
+class CookEnvCameraScreen extends StatefulWidget {
+  final Recipe recipe;
+
+  const CookEnvCameraScreen({
     Key? key,
-    required this.cameras,
+    required this.recipe,
   }) : super(key: key);
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _CookEnvCameraScreenState createState() => _CookEnvCameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
-  @override
-  void initState() {
-    initializeCamera(selectedCamera); //Initially selectedCamera = 0
-    super.initState();
+class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
+  late List<CameraDescription> cameras;
+  bool initiated = false;
+
+  initCameras() async {
+    List<CameraDescription> camerasRes = await availableCameras();
+    setState(() {
+      cameras = camerasRes;
+      initializeCamera(selectedCamera); //Initially selectedCamera = 0
+      initiated = true;
+    });
+
     tts.setLanguage('en');
     tts.setSpeechRate(0.4);
     listenForPermissions();
@@ -34,6 +45,12 @@ class _CameraScreenState extends State<CameraScreen> {
     if (!_speechEnabled) {
       _initSpeech();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initCameras();
   }
 
   final FlutterTts tts = FlutterTts();
@@ -52,7 +69,7 @@ class _CameraScreenState extends State<CameraScreen> {
     //  LCApis().uploadFridge(capturedImages[0]);
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
-      widget.cameras[cameraIndex],
+      cameras[cameraIndex],
       // Define the resolution to use.
       ResolutionPreset.medium,
     );
@@ -115,6 +132,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!initiated) {
+      return const Placeholder();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -138,7 +158,10 @@ class _CameraScreenState extends State<CameraScreen> {
             onTap: () async {
               await _initializeControllerFuture;
               var xFile = await _controller.takePicture();
-              Get.to(() => FridgeResultScreen(imageFile: File(xFile.path)));
+              Get.to(() => CookEnvResultScreen(
+                  cookEnvStateList: dummyCookEnvState,
+                  recipe: widget.recipe,
+                  imageFile: File(xFile.path)));
             },
             child: Container(
               height: 60,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lookncook/components/ingredient_item.dart';
 import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
+import 'package:lookncook/screens/ingredient_preparation_screen/ingredient_preparation_screen.dart';
 import 'package:lookncook/screens/recipe_list_screen/components/recipe_item.dart';
 
 class RecipeListScreen extends StatefulWidget {
@@ -65,9 +66,15 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
-                children: widget.recipeList
-                    .map((recipe) => RecipeItem(recipe: recipe))
-                    .toList(),
+                children: widget.recipeList.map((recipe) {
+                  return GestureDetector(
+                    onTap: () {
+                      // 탭된 RecipeItem과 관련된 스크린으로 이동하는 로직을 구현
+                      Get.to(() => IngredientPreparationScreen(recipe: recipe));
+                    },
+                    child: RecipeItem(recipe: recipe),
+                  );
+                }).toList(),
               ),
             )),
           ],

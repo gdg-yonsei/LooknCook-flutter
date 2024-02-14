@@ -3,6 +3,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
+import 'package:lookncook/screens/cook_env_camera_screen.dart';
 import 'package:lookncook/screens/ingredient_preparation_screen/components/ingredient_prep_item.dart';
 
 class IngredientPreparationScreen extends StatefulWidget {
@@ -50,7 +51,9 @@ class _IngredientPreparationScreenState
   void goNext() {
     if (idx == widget.recipe.ingredients.length - 1) {
       // TODO(용재): 조리환경 촬영 스크린으로 넘어가기
-      // Get.to(() => const CookFinishScreen());
+      Get.to(() => CookEnvCameraScreen(
+            recipe: widget.recipe,
+          ));
     } else {
       setState(() {
         idx += 1;

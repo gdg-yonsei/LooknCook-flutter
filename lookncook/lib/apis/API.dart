@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lookncook/utils/Logger.dart';
 
-Future<http.Response> fetchAlbum() async {
-  await dotenv.load(fileName: ".env");
-  return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-}
+// Future<http.Response> fetchAlbum() async {
+//   await dotenv.load(fileName: ".env");
+//   return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+// }
 
 class API {
   static final API instance = API._internal();

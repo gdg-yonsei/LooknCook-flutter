@@ -14,7 +14,7 @@ void main() async {
   Timer(const Duration(seconds: 2), () async {
     await dotenv.load(fileName: ".env");
     await API().init();
-    await LCApis().ping();
+    // await LCApis().ping();
     FlutterNativeSplash.remove();
   });
   runApp(const MyApp());

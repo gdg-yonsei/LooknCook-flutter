@@ -6,6 +6,8 @@ import 'package:lookncook/apis/apis.dart';
 import 'dart:async';
 
 import 'package:lookncook/constants/dummy.dart';
+import 'package:lookncook/dtos/cook_env_state.dart';
+import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/cook_env_camera_screen.dart';
 import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
 
@@ -23,7 +25,7 @@ class FridgeResultScreen extends StatefulWidget {
 
 class _FridgeResultScreenState extends State<FridgeResultScreen> {
   late File imageFile;
-  var ingredients = ["사과", "양배추", "귤", "사골", "육수"];
+  // var ingredients = dummyIngredients;
   bool _isLoading = true;
 
   @override
@@ -92,10 +94,10 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
                   Center(
                       child: ElevatedButton(
                     onPressed: () {
-                      Get.to(() => const CookEnvCameraScreen());
-                      // RecipeListScreen(
-                      //     recipeList: dummyRecipeList,
-                      //     ingredients: dummyIngredients));
+                      Get.to(() => RecipeListScreen(
+                          recipeList: dummyRecipeList,
+                          ingredients: dummyIngredients));
+
                       // 버튼 클릭 시 동작
                     },
                     style: ButtonStyle(

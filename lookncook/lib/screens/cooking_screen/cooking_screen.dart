@@ -8,6 +8,8 @@ import 'package:lookncook/dtos/recipe_step.dart';
 import 'package:lookncook/screens/cook_env_result_screen/components/cook_env_state_item.dart';
 import 'package:lookncook/screens/cook_finish_screen.dart';
 import 'package:lookncook/screens/cooking_screen/components/recipe_step_item.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
 class CookingScreen extends StatefulWidget {
   final Recipe recipe;
@@ -23,7 +25,10 @@ class CookingScreen extends StatefulWidget {
 
 class _CookingScreenState extends State<CookingScreen> {
   final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+
   int stepIdx = 0;
+  bool _speechEnabled = false;
 
   late RecipeStep step;
 
@@ -42,11 +47,38 @@ class _CookingScreenState extends State<CookingScreen> {
       step.threat.forEach((e) async {
         await tts.speak("${threatContent[e]}");
         // TODO(용재): Done 이라고 말하는거 기다리기
+        if (!_speechEnabled) {
+          _initSpeech();
+        }
       });
     }
 
     await tts.speak(step.body);
     // TODO(용재): 항상 Next 라고 말하는거 기다리다가 잡히면 goNextStep 호출
+    if (!_speechEnabled) {
+      _initSpeech();
+    }
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    setState(() {});
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    if (result.recognizedWords == "Next" || result.recognizedWords == "Done") {
+      goNextStep();
+    }
+    setState(() {});
   }
 
   @override

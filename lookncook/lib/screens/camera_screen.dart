@@ -71,9 +71,6 @@ class _CameraScreenState extends State<CameraScreen> {
       onResult: _onSpeechResult,
       listenFor: const Duration(seconds: 10),
       localeId: "en_En",
-      cancelOnError: false,
-      partialResults: false,
-      listenMode: ListenMode.confirmation,
     );
     setState(() {});
   }

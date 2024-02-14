@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -9,13 +12,13 @@ import 'package:lookncook/screens/cooking_screen/cooking_screen.dart';
 class CookEnvResultScreen extends StatefulWidget {
   final List<CookEnvState> cookEnvStateList;
   final Recipe recipe;
-  final String imageUrl;
+  final File imageFile;
 
   const CookEnvResultScreen(
       {super.key,
       required this.cookEnvStateList,
-      required this.imageUrl,
-      required this.recipe});
+      required this.recipe,
+      required this.imageFile});
 
   @override
   State<CookEnvResultScreen> createState() => _CookEnvResultScreenState();
@@ -23,6 +26,8 @@ class CookEnvResultScreen extends StatefulWidget {
 
 class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
   final FlutterTts tts = FlutterTts();
+  late File imageFile;
+
   void speakWithTts() async {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
@@ -30,14 +35,16 @@ class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
       widget.cookEnvStateList.map((i) => i.content).join("....."),
     );
 
-    Get.to(() => CookingScreen(
-          recipe: widget.recipe,
-        ));
+    // Get.to(() => CookingScreen(
+    //       recipe: widget.recipe,
+    //     ));
   }
 
   @override
   void initState() {
     super.initState();
+    imageFile = widget.imageFile;
+
     speakWithTts();
   }
 
@@ -51,9 +58,13 @@ class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            FittedBox(
-              fit: BoxFit.fill,
-              child: Image.network(widget.imageUrl),
+            SizedBox(
+              width: 400,
+              height: 300,
+              child: Image.file(
+                imageFile,
+                fit: BoxFit.contain,
+              ),
             ),
             Expanded(
                 child: ListView(

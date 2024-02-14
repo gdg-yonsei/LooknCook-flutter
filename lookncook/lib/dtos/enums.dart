@@ -1,4 +1,7 @@
-enum CookThreat { fire, knife, microwave, steaming }
+enum CookThreat {
+  fire,
+  knife,
+}
 
 enum CookEnvType { fire, knife, rotten, cookery }
 

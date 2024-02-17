@@ -1,23 +1,25 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/route_manager.dart';
-import 'package:lookncook/apis/apis.dart';
-import 'dart:async';
-
-import 'package:lookncook/constants/dummy.dart';
-import 'package:lookncook/dtos/cook_env_state.dart';
+import 'package:lookncook/components/ingredient_item.dart';
+import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
-import 'package:lookncook/screens/cook_env_camera_screen.dart';
 import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
 
 class FridgeResultScreen extends StatefulWidget {
   final File imageFile;
+  final List<Ingredient> ingredients;
+  final List<Recipe> recipeList;
 
-  const FridgeResultScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const FridgeResultScreen(
+      {Key? key,
+      required this.imageFile,
+      required this.ingredients,
+      required this.recipeList})
+      : super(key: key);
 
   @override
   State<FridgeResultScreen> createState() => _FridgeResultScreenState();
@@ -25,15 +27,21 @@ class FridgeResultScreen extends StatefulWidget {
 
 class _FridgeResultScreenState extends State<FridgeResultScreen> {
   late File imageFile;
-  // var ingredients = dummyIngredients;
   bool _isLoading = true;
+  final FlutterTts tts = FlutterTts();
 
   @override
   void initState() {
     super.initState();
+    tts.setLanguage('en');
+    tts.setSpeechRate(0.5);
     imageFile = widget.imageFile;
     // 5초 후에 _updateLoadingState 함수 호출
-    Timer(const Duration(seconds: 5), _updateLoadingState);
+    Timer(const Duration(seconds: 2), () {
+      _updateLoadingState();
+      tts.speak(
+          "There are ingredients such as ${widget.ingredients.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more" : ""} in the refrigerator. To receive personalized recipe recommendations, please press the button on the bottom center or say “Show me recipes”. ");
+    });
   }
 
   void _updateLoadingState() {
@@ -65,7 +73,7 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
                   const Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text(
-                      "재료목록",
+                      "List of Ingredients",
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -77,16 +85,8 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: dummyIngredients.map((ingredient) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 35.0),
-                            child: Text(
-                              "- ${ingredient.name}",
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                          );
+                        children: widget.ingredients.map((ingredient) {
+                          return IngredientItem(ingredient: ingredient);
                         }).toList(),
                       ),
                     ),
@@ -95,8 +95,8 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
                       child: ElevatedButton(
                     onPressed: () {
                       Get.to(() => RecipeListScreen(
-                          recipeList: dummyRecipeList,
-                          ingredients: dummyIngredients));
+                          recipeList: widget.recipeList,
+                          ingredients: widget.ingredients));
 
                       // 버튼 클릭 시 동작
                     },
@@ -105,8 +105,9 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
                           MaterialStateProperty.all(const Size(120, 70)),
                     ),
                     child: const Text(
-                      "냉장고 맞춤 레시피 추천받기",
+                      "Get personalized recipes for the refrigerator",
                       style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
                     ),
                   )),
                   const SizedBox(

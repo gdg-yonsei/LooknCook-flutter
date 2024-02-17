@@ -38,12 +38,9 @@ class HomeScreen extends StatelessWidget {
                 if (snapShot.hasData) {
                   return ElevatedButton(
                     onPressed: () async {
-                      Timer(const Duration(seconds: 3), () {
-                        Get.to(() => IngredientPreparationScreen(
-                              recipe: dummyRecipeList[2],
-                              // cameras: snapShot.data!,
-                            ));
-                      });
+                      Get.to(() => CameraScreen(
+                            cameras: snapShot.data!,
+                          ));
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(20),

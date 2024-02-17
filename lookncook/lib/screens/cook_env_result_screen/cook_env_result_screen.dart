@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -31,10 +29,9 @@ class _CookEnvResultScreenState extends State<CookEnvResultScreen> {
   void speakWithTts() async {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
-    await tts.speak(
+    tts.speak(
       widget.cookEnvStateList.map((i) => i.content).join("....."),
     );
-
     Get.to(() => CookingScreen(
           recipe: widget.recipe,
         ));

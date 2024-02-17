@@ -1,14 +1,13 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:lookncook/apis/apis.dart';
+import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/screens/fridge_result_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -27,13 +26,13 @@ class _CameraScreenState extends State<CameraScreen> {
     initializeCamera(selectedCamera); //Initially selectedCamera = 0
     super.initState();
     tts.setLanguage('en');
-    tts.setSpeechRate(0.4);
+    tts.setSpeechRate(0.5);
     listenForPermissions();
     tts.speak(
-        "Press the shooting button in the bottom center or say ‘shooting’");
-    if (!_speechEnabled) {
-      _initSpeech();
-    }
+        "Press the capture button on the bottom center, or say “Take Picture” to take a photo. ");
+    // if (!_speechEnabled) {
+    //   _initSpeech();
+    // }
   }
 
   final FlutterTts tts = FlutterTts();
@@ -138,7 +137,10 @@ class _CameraScreenState extends State<CameraScreen> {
             onTap: () async {
               await _initializeControllerFuture;
               var xFile = await _controller.takePicture();
-              Get.to(() => FridgeResultScreen(imageFile: File(xFile.path)));
+              Get.to(() => FridgeResultScreen(
+                  imageFile: File(xFile.path),
+                  ingredients: dummyIngredients,
+                  recipeList: dummyRecipeList));
             },
             child: Container(
               height: 60,

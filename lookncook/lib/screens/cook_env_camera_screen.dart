@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -38,13 +37,13 @@ class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
     });
 
     tts.setLanguage('en');
-    tts.setSpeechRate(0.4);
+    tts.setSpeechRate(0.5);
     listenForPermissions();
     tts.speak(
-        "Press the shooting button in the bottom center or say ‘shooting’");
-    if (!_speechEnabled) {
-      _initSpeech();
-    }
+        "Once you’re ready to begin, please take a photo of the cooking environment. I will identify the location of cooking utensils and any potential hazards. When you are prepared, please say “Capture Photo”.");
+    // if (!_speechEnabled) {
+    //   _initSpeech();
+    // }
   }
 
   @override

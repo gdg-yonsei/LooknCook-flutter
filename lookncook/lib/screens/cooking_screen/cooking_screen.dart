@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:lookncook/dtos/cook_env_state.dart';
 import 'package:lookncook/dtos/enums.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/dtos/recipe_step.dart';
-import 'package:lookncook/screens/cook_env_result_screen/components/cook_env_state_item.dart';
 import 'package:lookncook/screens/cook_finish_screen.dart';
 import 'package:lookncook/screens/cooking_screen/components/recipe_step_item.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class CookingScreen extends StatefulWidget {
   final Recipe recipe;
@@ -44,16 +42,18 @@ class _CookingScreenState extends State<CookingScreen> {
     tts.setSpeechRate(0.5);
     // read possible threats if any
     if (step.threat.isNotEmpty) {
-      step.threat.forEach((e) async {
-        await tts.speak("${threatContent[e]}");
-        // TODO(용재): Done 이라고 말하는거 기다리기
-        // if (!_speechEnabled) {
-        //   _initSpeech();
-        // }
-      });
-    }
+      tts.speak(["${threatContent[step.threat[0]]}", step.body].join(" "));
+      //   step.threat.forEach((e) async {
 
-    await tts.speak(step.body);
+      //     // TODO(용재): Done 이라고 말하는거 기다리기
+      //     // if (!_speechEnabled) {
+      //     //   _initSpeech();
+      //     // }
+      //   });
+      // }
+    } else {
+      tts.speak([step.body].join(" "));
+    }
     // TODO(용재): 항상 Next 라고 말하는거 기다리다가 잡히면 goNextStep 호출
     // if (!_speechEnabled) {
     //   _initSpeech();

@@ -17,7 +17,7 @@ class _CookFinishScreenState extends State<CookFinishScreen> {
     super.initState();
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
-    tts.speak('요리가 완료되었어요.');
+    tts.speak('Bon Appétit!');
   }
 
   @override

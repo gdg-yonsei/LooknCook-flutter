@@ -37,7 +37,7 @@ class RecipeStepItem extends Card {
                       ? [
                           Row(
                             children: [
-                              Text("Rist Factors",
+                              Text("Risk Factors",
                                   style: TextStyle(
                                       fontSize: 19,
                                       fontWeight: FontWeight.w500,

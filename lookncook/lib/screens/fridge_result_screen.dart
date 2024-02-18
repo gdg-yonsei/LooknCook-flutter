@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/route_manager.dart';
@@ -8,6 +6,8 @@ import 'package:lookncook/components/ingredient_item.dart';
 import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class FridgeResultScreen extends StatefulWidget {
   final File imageFile;
@@ -29,6 +29,8 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
   late File imageFile;
   bool _isLoading = true;
   final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
 
   @override
   void initState() {
@@ -37,14 +39,43 @@ class _FridgeResultScreenState extends State<FridgeResultScreen> {
     tts.setSpeechRate(0.5);
     imageFile = widget.imageFile;
     // 5초 후에 _updateLoadingState 함수 호출
-    Timer(const Duration(seconds: 2), () {
-      _updateLoadingState();
-      tts.speak(
-          "There are ingredients such as ${widget.ingredients.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more" : ""} in the refrigerator. To receive personalized recipe recommendations, please press the button on the bottom center or say “Show me recipes”. ");
+    tts.speak(
+      "There are ingredients such as ${widget.ingredients.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more" : ""} in the refrigerator. To receive personalized recipe recommendations, please press the button on the bottom center or say “Show me recipes”. ",
+    );
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
     });
   }
 
-  void _updateLoadingState() {
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    Get.to(() => RecipeListScreen(
+        recipeList: widget.recipeList, ingredients: widget.ingredients));
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    if (result.recognizedWords == "Show me recipes") {
+      setState(() {
+        Get.to(
+          () => RecipeListScreen(
+              recipeList: widget.recipeList, ingredients: widget.ingredients),
+        );
+      });
+    }
+  }
+
+  void updateLoadingState() {
     setState(() {
       _isLoading = false;
     });

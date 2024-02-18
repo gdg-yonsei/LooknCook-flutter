@@ -5,6 +5,8 @@ import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/cook_env_camera_screen.dart';
 import 'package:lookncook/screens/ingredient_preparation_screen/components/ingredient_prep_item.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class IngredientPreparationScreen extends StatefulWidget {
   final Recipe recipe;
@@ -22,6 +24,8 @@ class IngredientPreparationScreen extends StatefulWidget {
 class _IngredientPreparationScreenState
     extends State<IngredientPreparationScreen> {
   final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
   int idx = 0;
 
   late Ingredient ingredient;
@@ -32,12 +36,22 @@ class _IngredientPreparationScreenState
     // read possible threats if any
 
     if (idx == 0) {
-      await tts.speak(
+      tts.speak(
           "For the first step, we will take out the ingredients from the refrigerator.");
     }
 
-    await tts.speak(ingredient.locationDescription);
+    tts.speak(ingredient.locationDescription);
     // TODO(용재): Next 들으면 goNext 호출
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    _startListening();
   }
 
   @override
@@ -46,6 +60,22 @@ class _IngredientPreparationScreenState
     ingredient = widget.recipe.ingredients[0];
 
     readIngredient();
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    setState(() {});
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    // 원하는 음식을 말하면 넘어가도록!
+    if (result.recognizedWords == "Next") {
+      goNext();
+    }
   }
 
   void goNext() {

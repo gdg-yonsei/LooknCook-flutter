@@ -25,9 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
     // listenForPermissions();
+    listenForPermissions();
     tts.speak(
         "Press the capture button on the bottom center, or say “Take Picture” to take a photo. ");
-    listenForPermissions();
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
   }
 
   final FlutterTts tts = FlutterTts();
@@ -36,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
-    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+    _startListening();
   }
 
   void _startListening() async {
@@ -50,9 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
     if (result.recognizedWords == "start camera") {
-      setState(() {
-        Get.to(() => const CameraScreen());
-      });
+      Get.to(() => const CameraScreen());
     }
   }
 

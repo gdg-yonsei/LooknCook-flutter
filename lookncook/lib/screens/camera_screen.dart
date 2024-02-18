@@ -32,9 +32,11 @@ class _CameraScreenState extends State<CameraScreen> {
     tts.setSpeechRate(0.5);
     tts.speak(
         "Press the capture button on the bottom center, or say “Take Picture” to take a photo. ");
-    if (!_speechEnabled) {
-      _initSpeech();
-    }
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
   }
 
   final FlutterTts tts = FlutterTts();
@@ -64,7 +66,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
-    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+    _startListening();
   }
 
   void _startListening() async {
@@ -73,12 +75,10 @@ class _CameraScreenState extends State<CameraScreen> {
       listenFor: const Duration(seconds: 10),
       localeId: "en_En",
     );
-    setState(() {
-      Get.to(() => FridgeResultScreen(
-          imageFile: capturedImages[0],
-          ingredients: dummyIngredients,
-          recipeList: dummyRecipeList));
-    });
+    Get.to(() => FridgeResultScreen(
+        imageFile: capturedImages[0],
+        ingredients: dummyIngredients,
+        recipeList: dummyRecipeList));
   }
 
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {

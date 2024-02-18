@@ -2,21 +2,82 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/screens/camera_screen.dart';
-import 'package:lookncook/screens/cook_env_result_screen/cook_env_result_screen.dart';
-import 'package:lookncook/screens/cooking_screen/cooking_screen.dart';
-import 'package:lookncook/screens/emergency_situation_screen.dart';
-import 'package:lookncook/screens/fridge_result_screen.dart';
-import 'package:lookncook/screens/ingredient_preparation_screen/ingredient_preparation_screen.dart';
-import 'package:lookncook/screens/recipe_list_screen/recipe_list_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   Future<List<CameraDescription>> cameras = availableCameras();
+
+  @override
+  void initState() {
+    super.initState();
+    tts.setLanguage('en');
+    tts.setSpeechRate(0.5);
+    // listenForPermissions();
+    tts.speak(
+        "Press the capture button on the bottom center, or say “Take Picture” to take a photo. ");
+    listenForPermissions();
+  }
+
+  final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    setState(() {});
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    if (result.recognizedWords == "start camera") {
+      setState(() {
+        Get.to(() => const CameraScreen());
+      });
+    }
+  }
+
+  void listenForPermissions() async {
+    final status = await Permission.microphone.status;
+    switch (status) {
+      case PermissionStatus.denied:
+        requestForPermission();
+        break;
+      case PermissionStatus.granted:
+        break;
+      case PermissionStatus.limited:
+        break;
+      case PermissionStatus.permanentlyDenied:
+        break;
+      case PermissionStatus.restricted:
+        break;
+      case PermissionStatus.provisional:
+        break;
+    }
+  }
+
+  Future<void> requestForPermission() async {
+    await Permission.microphone.request();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +90,22 @@ class HomeScreen extends StatelessWidget {
             width: 320,
             child: Image.asset('assets/image/LC_Logo.png'),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          FutureBuilder(
-              future: cameras,
-              builder: (context, snapShot) {
-                if (snapShot.hasData) {
-                  return ElevatedButton(
-                    onPressed: () async {
-                      Get.to(() => CameraScreen(
-                            cameras: snapShot.data!,
-                          ));
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        "Begin",
-                        style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              }),
+          ElevatedButton(
+            onPressed: () async {
+              Get.to(() => const CameraScreen());
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                "Begin",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: Text(

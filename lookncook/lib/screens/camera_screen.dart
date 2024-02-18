@@ -10,29 +10,31 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class CameraScreen extends StatefulWidget {
-  final List<CameraDescription> cameras;
-  const CameraScreen({
-    Key? key,
-    required this.cameras,
-  }) : super(key: key);
+  const CameraScreen({Key? key}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  @override
-  void initState() {
-    initializeCamera(selectedCamera); //Initially selectedCamera = 0
-    super.initState();
+  late List<CameraDescription> cameras;
+  bool initiated = false;
+
+  initCameras() async {
+    List<CameraDescription> camerasRes = await availableCameras();
+    setState(() {
+      cameras = camerasRes;
+      initializeCamera(selectedCamera); //Initially selectedCamera = 0
+      initiated = true;
+    });
+
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
-    listenForPermissions();
     tts.speak(
         "Press the capture button on the bottom center, or say “Take Picture” to take a photo. ");
-    // if (!_speechEnabled) {
-    //   _initSpeech();
-    // }
+    if (!_speechEnabled) {
+      _initSpeech();
+    }
   }
 
   final FlutterTts tts = FlutterTts();
@@ -51,7 +53,7 @@ class _CameraScreenState extends State<CameraScreen> {
     //  LCApis().uploadFridge(capturedImages[0]);
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
-      widget.cameras[cameraIndex],
+      cameras[cameraIndex],
       // Define the resolution to use.
       ResolutionPreset.medium,
     );
@@ -71,7 +73,12 @@ class _CameraScreenState extends State<CameraScreen> {
       listenFor: const Duration(seconds: 10),
       localeId: "en_En",
     );
-    setState(() {});
+    setState(() {
+      Get.to(() => FridgeResultScreen(
+          imageFile: capturedImages[0],
+          ingredients: dummyIngredients,
+          recipeList: dummyRecipeList));
+    });
   }
 
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
@@ -82,28 +89,28 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {});
   }
 
-  void listenForPermissions() async {
-    final status = await Permission.microphone.status;
-    switch (status) {
-      case PermissionStatus.denied:
-        requestForPermission();
-        break;
-      case PermissionStatus.granted:
-        break;
-      case PermissionStatus.limited:
-        break;
-      case PermissionStatus.permanentlyDenied:
-        break;
-      case PermissionStatus.restricted:
-        break;
-      case PermissionStatus.provisional:
-        break;
-    }
-  }
+  // void listenForPermissions() async {
+  //   final status = await Permission.microphone.status;
+  //   switch (status) {
+  //     case PermissionStatus.denied:
+  //       requestForPermission();
+  //       break;
+  //     case PermissionStatus.granted:
+  //       break;
+  //     case PermissionStatus.limited:
+  //       break;
+  //     case PermissionStatus.permanentlyDenied:
+  //       break;
+  //     case PermissionStatus.restricted:
+  //       break;
+  //     case PermissionStatus.provisional:
+  //       break;
+  //   }
+  // }
 
-  Future<void> requestForPermission() async {
-    await Permission.microphone.request();
-  }
+  // Future<void> requestForPermission() async {
+  //   await Permission.microphone.request();
+  // }
 
   @override
   void dispose() {

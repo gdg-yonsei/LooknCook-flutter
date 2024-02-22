@@ -58,7 +58,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     if (result.recognizedWords == "ABC") {
       Recipe recipe =
           widget.recipeList.firstWhere((recipe) => recipe.name == "ABC");
-      setState(() => Get.to(() => IngredientPreparationScreen(recipe: recipe)));
+      Get.to(() => IngredientPreparationScreen(recipe: recipe));
     }
   }
 

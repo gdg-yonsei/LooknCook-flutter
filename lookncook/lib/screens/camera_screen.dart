@@ -49,8 +49,6 @@ class _CameraScreenState extends State<CameraScreen> {
   int selectedCamera = 0;
   List<File> capturedImages = [];
 
-  final String _lastWords = "";
-
   initializeCamera(int cameraIndex) async {
     //  LCApis().uploadFridge(capturedImages[0]);
     _controller = CameraController(

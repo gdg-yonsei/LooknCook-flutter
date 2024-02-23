@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class EmergencySituationScreen extends StatefulWidget {
   const EmergencySituationScreen({super.key});
@@ -12,12 +14,43 @@ class EmergencySituationScreen extends StatefulWidget {
 
 class _EmergencySituationScreenState extends State<EmergencySituationScreen> {
   final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+
   void speakWithTts() async {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
-    await tts.speak(
+    tts.speak(
       "Emergency situation detected! Please explain the emergency situation. A emergency notification will be sent to the registered guardian’s number.",
     );
+
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    _startListening();
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    setState(() {});
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    // 1. 여기서 사용자가 말한 내용을 119로 보내기!..
+    // result.recognizedWords
+
+    // 2. 그리고 다시 요리하기로 돌아가기
+    Navigator.pop(context);
   }
 
   @override

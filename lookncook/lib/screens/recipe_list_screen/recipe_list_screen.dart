@@ -6,6 +6,8 @@ import 'package:lookncook/dtos/ingredient.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/ingredient_preparation_screen/ingredient_preparation_screen.dart';
 import 'package:lookncook/screens/recipe_list_screen/components/recipe_item.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class RecipeListScreen extends StatefulWidget {
   final List<Recipe> recipeList;
@@ -20,6 +22,8 @@ class RecipeListScreen extends StatefulWidget {
 
 class _RecipeListScreenState extends State<RecipeListScreen> {
   final FlutterTts tts = FlutterTts();
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
 
   @override
   void initState() {
@@ -28,6 +32,34 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     tts.setSpeechRate(0.5);
     tts.speak(
         "With the ingredients in your refrigerator, you can make dishes such as ${widget.recipeList.sublist(0, 2).map((i) => i.name).join(",")}${widget.ingredients.length > 2 ? ", and more!" : "!"} Please select or say the name of the recipe, and I’ll assist you further.");
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    _startListening();
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 10),
+      localeId: "en_En",
+    );
+    setState(() {});
+  }
+
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    // 원하는 음식을 말하면 넘어가도록!
+    if (result.recognizedWords == "ABC") {
+      Recipe recipe =
+          widget.recipeList.firstWhere((recipe) => recipe.name == "ABC");
+      Get.to(() => IngredientPreparationScreen(recipe: recipe));
+    }
   }
 
   @override

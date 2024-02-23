@@ -3,11 +3,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:lookncook/apis/apis.dart';
 import 'package:lookncook/constants/dummy.dart';
 import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/screens/cook_env_result_screen/cook_env_result_screen.dart';
-import 'package:lookncook/screens/fridge_result_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -41,9 +39,11 @@ class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
     listenForPermissions();
     tts.speak(
         "Once you’re ready to begin, please take a photo of the cooking environment. I will identify the location of cooking utensils and any potential hazards. When you are prepared, please say “Capture Photo”.");
-    // if (!_speechEnabled) {
-    //   _initSpeech();
-    // }
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
   }
 
   @override
@@ -62,8 +62,6 @@ class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
   int selectedCamera = 0;
   List<File> capturedImages = [];
 
-  final String _lastWords = "";
-
   initializeCamera(int cameraIndex) async {
     //  LCApis().uploadFridge(capturedImages[0]);
     _controller = CameraController(
@@ -79,7 +77,7 @@ class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
 
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
-    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+    _startListening();
   }
 
   void _startListening() async {
@@ -88,6 +86,10 @@ class _CookEnvCameraScreenState extends State<CookEnvCameraScreen> {
       listenFor: const Duration(seconds: 10),
       localeId: "en_En",
     );
+    Get.to(() => CookEnvResultScreen(
+        cookEnvStateList: dummyCookEnvState,
+        recipe: widget.recipe,
+        imageFile: capturedImages[0]));
     setState(() {});
   }
 

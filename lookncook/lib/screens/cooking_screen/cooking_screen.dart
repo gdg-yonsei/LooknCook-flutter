@@ -6,6 +6,7 @@ import 'package:lookncook/dtos/recipe.dart';
 import 'package:lookncook/dtos/recipe_step.dart';
 import 'package:lookncook/screens/cook_finish_screen.dart';
 import 'package:lookncook/screens/cooking_screen/components/recipe_step_item.dart';
+import 'package:lookncook/screens/emergency_situation_screen.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -43,26 +44,19 @@ class _CookingScreenState extends State<CookingScreen> {
     // read possible threats if any
     if (step.threat.isNotEmpty) {
       tts.speak(["${threatContent[step.threat[0]]}", step.body].join(" "));
-      //   step.threat.forEach((e) async {
-
-      //     // TODO(용재): Done 이라고 말하는거 기다리기
-      //     // if (!_speechEnabled) {
-      //     //   _initSpeech();
-      //     // }
-      //   });
-      // }
     } else {
       tts.speak([step.body].join(" "));
     }
-    // TODO(용재): 항상 Next 라고 말하는거 기다리다가 잡히면 goNextStep 호출
-    // if (!_speechEnabled) {
-    //   _initSpeech();
-    // }
+    tts.setCompletionHandler(() {
+      if (!_speechEnabled) {
+        _initSpeech();
+      }
+    });
   }
 
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
-    await Future.delayed(const Duration(seconds: 5), () => _startListening());
+    _startListening();
   }
 
   void _startListening() async {
@@ -78,7 +72,16 @@ class _CookingScreenState extends State<CookingScreen> {
     if (result.recognizedWords == "Next" || result.recognizedWords == "Done") {
       goNextStep();
     }
-    setState(() {});
+    if (result.recognizedWords == "Emergency!") {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const EmergencySituationScreen()),
+      );
+
+      goNextStep();
+    }
+    // setState(() {});
   }
 
   @override

@@ -1,6 +1,8 @@
+import 'package:path/path.dart' as p;
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 import 'package:http_parser/http_parser.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -82,10 +84,14 @@ class API {
 
     for (String key in data.keys) {
       var value = data[key];
+
       if (value is File) {
         var bytes = value.readAsBytesSync();
+        var etc = p.extension(value.path);
+
         request.files.add(http.MultipartFile.fromBytes(key, bytes,
-            contentType: MediaType('image', 'jpeg')));
+            contentType: MediaType('image', etc),
+            filename: Random().nextInt(1000).toString()));
       } else {
         request.fields[key] = value;
       }

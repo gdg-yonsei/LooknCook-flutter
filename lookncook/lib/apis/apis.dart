@@ -17,14 +17,25 @@ class LCApis {
 
   Future<String> uploadFridge(File image) async {
     var res = await _api.postMultipart(
-      "/fridge",
+      "/GetFridgeRecipe",
       {"image": image},
       headers: {
         "Content-Type": "multipart/form-data",
       },
     );
 
-    String fridge = res["Parts"][0];
-    return fridge;
+    return "";
+  }
+
+  Future<String> uploadCookEnv(File image) async {
+    var res = await _api.postMultipart(
+      "/GetKitchenEnvironment",
+      {"image": image},
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    );
+
+    return "";
   }
 }

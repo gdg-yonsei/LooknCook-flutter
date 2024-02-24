@@ -76,13 +76,14 @@ class LCApis {
 
       String prompt = [
         "DO NOT INCLUDE BACKTICKS OR \n or \ IN THE RESPONSE.",
-        "Do not use Markdown in the response",
         "You will given a list of title and part of description of youtube videos about blind cooking tips.",
         "Based on the information, categorize these videos into 3 or 4 categories.",
         "One video might be included in several categories."
-            "Then, generate the JSON list of map that contains two keys, one is \"category\", which has value of String category name, and \"titles\" which has value of list of String titles of videos that is included in that category.",
-        "Response in a json format provided.",
+            "Then, generate the stringified JSON list of maps of each contains two keys, one is \"category\", which has value of String category name, and \"titles\" which has value of list of String titles of videos that is included in that category.",
+        "Response in a format provided.",
         '[{"category":, "titles": },{"category":, "titles":},{"category":, "titles":}]',
+        "",
+        "Do not use Markdown in the response",
         "Below is the information.",
         videos.map((i) {
           return "title: ${i.title}\ndescription: ${i.description}";
@@ -127,7 +128,7 @@ class LCApis {
     } catch (e) {
       Logger().logError(e.toString());
       Logger().logError("Error in fetching videos");
-      return [];
+      return await getTutorials();
     }
   }
 }

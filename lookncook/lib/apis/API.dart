@@ -54,6 +54,23 @@ class API {
     }
   }
 
+  Future<Map<String, dynamic>> getFromOpenApi(String url,
+      {Map<String, String>? headers}) async {
+    Logger().logInfo(url);
+
+    var res = await http.get(
+      Uri.parse(url),
+      headers: headers == null ? _headers : {..._headers, ...headers},
+    );
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+
+      return body;
+    } else {
+      throw Exception('[API] failed to get data');
+    }
+  }
+
   Future<Map<String, dynamic>> post(String url,
       {Map<String, String>? headers, dynamic data}) async {
     String url_ = '$_baseUrl$url';

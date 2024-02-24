@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:lookncook/screens/%08tutorial_list_screen/tutorial_list_screen.dart';
 import 'package:lookncook/screens/camera_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -117,6 +118,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontWeightDelta: 2),
               textAlign: TextAlign.center,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Text(
+              "Enhance your culinary skills before you start creating delicious dishes!",
+              style: context.textTheme.titleLarge?.apply(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeightDelta: 1),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Get.to(() => TutorialListScreen());
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "Discover Cooking Tips",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
           )
         ],

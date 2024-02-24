@@ -21,7 +21,7 @@ class _EmergencySituationScreenState extends State<EmergencySituationScreen> {
     tts.setLanguage('en');
     tts.setSpeechRate(0.5);
     tts.speak(
-      "Emergency situation detected! Please explain the emergency situation. A emergency notification will be sent to the registered guardian’s number.",
+      "Emergency situation detected! Please explain the emergency situation in words.",
     );
 
     tts.setCompletionHandler(() {

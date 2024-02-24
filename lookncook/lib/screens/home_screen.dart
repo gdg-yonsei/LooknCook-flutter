@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              Get.to(() => const TutorialListScreen());
+              Get.to(() => TutorialListScreen());
             },
             child: const Padding(
               padding: EdgeInsets.all(10),
